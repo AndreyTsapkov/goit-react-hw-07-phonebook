@@ -1,5 +1,4 @@
-import { useDispatch } from 'react-redux';
-import { deleteItem } from 'redux/contactSlice';
+import { useDeleteContactMutation } from 'redux/contactsApi';
 import { PropTypes } from 'prop-types';
 import {
   Contact,
@@ -9,7 +8,7 @@ import {
 } from './Contacts.styled';
 
 export const Contacts = ({ contacts }) => {
-  const dispatch = useDispatch();
+  const [deleteContact] = useDeleteContactMutation();
 
   return (
     <ContactsList>
@@ -19,10 +18,7 @@ export const Contacts = ({ contacts }) => {
             <Contact>
               {name}: {number}
             </Contact>
-            <ButtonDelete
-              type="button"
-              onClick={() => dispatch(deleteItem(id))}
-            >
+            <ButtonDelete type="button" onClick={() => deleteContact(id)}>
               Delete
             </ButtonDelete>
           </ContactsItem>

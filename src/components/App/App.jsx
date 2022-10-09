@@ -1,7 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { addItem } from 'redux/contactSlice';
-import { getContact, getFilterWord } from 'redux/selectors';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { useSelector } from 'react-redux';
+import { getFilterWord } from 'redux/selectors';
+import { useGetContactsQuery } from 'redux/contactsApi';
+import { RotatingLines } from 'react-loader-spinner';
 import {
   AppContainer,
   AppTitle,
@@ -9,30 +9,18 @@ import {
   AppSection,
   DesignDiv,
   Circle,
+  Loader,
 } from './App.styled';
-import { Contacts } from './Contacts';
-import { ContactsForm } from './ContactsForm';
-import { ContactsFilter } from './ContactsFilter';
+import { Contacts } from '../Contacts';
+import { ContactsForm } from '../ContactsForm';
+import { ContactsFilter } from '../ContactsFilter';
 
 //
 
 export const App = () => {
-  const dispatch = useDispatch();
+  const { data: contacts, isLoading } = useGetContactsQuery();
 
-  const contacts = useSelector(getContact);
   const filterWord = useSelector(getFilterWord);
-
-  const addContact = contactObj => {
-    if (
-      contacts.find(
-        contact => contact.name.toLowerCase() === contactObj.name.toLowerCase()
-      )
-    ) {
-      return Notify.warning(`${contactObj.name} is already in contacts.`);
-    }
-
-    dispatch(addItem(contactObj));
-  };
 
   const getNormilizeContacts = () => {
     if (filterWord) {
@@ -54,7 +42,7 @@ export const App = () => {
     <AppContainer>
       <AppSection>
         <AppMainTitle>Phonebook</AppMainTitle>
-        <ContactsForm onSubmit={addContact}></ContactsForm>
+        <ContactsForm></ContactsForm>
         <DesignDiv>
           <Circle
             color="#f943fd"
@@ -85,6 +73,17 @@ export const App = () => {
 
       <AppSection>
         <AppTitle>Contacts</AppTitle>
+        {isLoading && (
+          <Loader role="alert">
+            <RotatingLines
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="250"
+              visible={true}
+            />
+          </Loader>
+        )}
         <ContactsFilter />
         {contacts.length !== 0 ? (
           <Contacts contacts={getNormilizeContacts()} />
@@ -93,3 +92,5 @@ export const App = () => {
     </AppContainer>
   );
 };
+
+// return Notify.warning(`${contactObj.name} is already in contacts.`);

@@ -70,3 +70,8 @@ export const Circle = styled.div`
   margin-left: ${props => props.marginLeft};
   border-radius: 50%;
 `;
+
+export const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+`;

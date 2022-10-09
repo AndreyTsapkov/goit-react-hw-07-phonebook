@@ -7,12 +7,25 @@ import {
   Label,
 } from './ContactsForm.styled';
 import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix';
+import {
+  useGetContactsQuery,
+  useCreateContactMutation,
+} from 'redux/contactsApi';
 
 //
 
-export const ContactsForm = ({ onSubmit }) => {
+// const initialValues = {
+//   name: '',
+//   number: '',
+// };
+
+export const ContactsForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const [createContact] = useCreateContactMutation();
+  const { data: contacts } = useGetContactsQuery();
 
   const contactObj = (name, number) => {
     return {
@@ -25,9 +38,15 @@ export const ContactsForm = ({ onSubmit }) => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const contact = contactObj(name, number);
+    const newContact = contactObj(name, number);
 
-    onSubmit(contact);
+    const findContact = contacts.find(
+      contact => contact.name.toLowerCase() === name
+    );
+
+    findContact
+      ? Notify.warning(`${name} is already in contacts.`)
+      : createContact(newContact);
     reset();
   };
 
