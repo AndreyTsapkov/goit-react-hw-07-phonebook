@@ -1,5 +1,6 @@
-import { useDeleteContactMutation } from 'redux/contactsApi';
+import { useDispatch } from 'react-redux';
 import { PropTypes } from 'prop-types';
+import { contactsOperations } from 'redux/contacts';
 import {
   Contact,
   ContactsItem,
@@ -8,17 +9,20 @@ import {
 } from './Contacts.styled';
 
 export const Contacts = ({ contacts }) => {
-  const [deleteContact] = useDeleteContactMutation();
+  const dispatch = useDispatch();
 
   return (
     <ContactsList>
-      {contacts.map(({ id, name, number }) => {
+      {contacts.map(({ id, name, phone }) => {
         return (
           <ContactsItem key={id}>
             <Contact>
-              {name}: {number}
+              {name}: {phone}
             </Contact>
-            <ButtonDelete type="button" onClick={() => deleteContact(id)}>
+            <ButtonDelete
+              type="button"
+              onClick={() => dispatch(contactsOperations.removeContacts(id))}
+            >
               Delete
             </ButtonDelete>
           </ContactsItem>

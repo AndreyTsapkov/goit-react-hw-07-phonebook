@@ -1,7 +1,12 @@
-import { useSelector } from 'react-redux';
-import { getFilterWord } from 'redux/selectors';
-import { useGetContactsQuery } from 'redux/contactsApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import {
+  getContact,
+  getFilterWord,
+  IsLoading,
+} from 'redux/contacts/contactsSelectors';
 import { RotatingLines } from 'react-loader-spinner';
+import { contactsOperations } from 'redux/contacts';
 import {
   AppContainer,
   AppTitle,
@@ -18,9 +23,16 @@ import { ContactsFilter } from '../ContactsFilter';
 //
 
 export const App = () => {
-  const { data: contacts, isLoading } = useGetContactsQuery();
+  const dispatch = useDispatch();
 
+  const contacts = useSelector(getContact);
+  console.log(contacts);
   const filterWord = useSelector(getFilterWord);
+  const loading = useSelector(IsLoading);
+
+  useEffect(() => {
+    dispatch(contactsOperations.fetchContacts());
+  }, [dispatch]);
 
   const getNormilizeContacts = () => {
     if (filterWord) {
@@ -30,7 +42,7 @@ export const App = () => {
         return contacts.filter(
           contact =>
             contact.name.toLowerCase().includes(normalizeFilter) ||
-            contact.number.includes(filterWord)
+            contact.phone.includes(filterWord)
         );
       }
     }
@@ -73,13 +85,13 @@ export const App = () => {
 
       <AppSection>
         <AppTitle>Contacts</AppTitle>
-        {isLoading && (
+        {loading && (
           <Loader role="alert">
             <RotatingLines
               strokeColor="grey"
               strokeWidth="5"
               animationDuration="0.75"
-              width="250"
+              width="100"
               visible={true}
             />
           </Loader>

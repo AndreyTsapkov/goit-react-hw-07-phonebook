@@ -1,6 +1,6 @@
 import { FilterTitle, InputFilter, LabelFilter } from './ContactsFilter.styled';
 import { useDispatch } from 'react-redux';
-import { filterContacts } from 'redux/filterSlice';
+import { filterItems } from 'redux/contacts/contactsSlice';
 
 export const ContactsFilter = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ export const ContactsFilter = () => {
       <FilterTitle>Find contacts by name or number</FilterTitle>
       <InputFilter
         type="text"
-        onChange={event => dispatch(filterContacts(event.currentTarget.value))}
+        onChange={event => dispatch(filterItems(event.currentTarget.value))}
       ></InputFilter>
     </LabelFilter>
   );

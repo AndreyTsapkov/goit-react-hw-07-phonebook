@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { getContact } from 'redux/contacts/contactsSelectors';
+import { contactsOperations } from 'redux/contacts';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ButtonSubmit,
   Form,
@@ -6,47 +9,28 @@ import {
   InputTitle,
   Label,
 } from './ContactsForm.styled';
-import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
-import {
-  useGetContactsQuery,
-  useCreateContactMutation,
-} from 'redux/contactsApi';
 
 //
-
-// const initialValues = {
-//   name: '',
-//   number: '',
-// };
 
 export const ContactsForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const [createContact] = useCreateContactMutation();
-  const { data: contacts } = useGetContactsQuery();
-
-  const contactObj = (name, number) => {
-    return {
-      id: nanoid(),
-      name,
-      number,
-    };
-  };
+  const contacts = useSelector(getContact);
+  const dispatch = useDispatch();
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    const newContact = contactObj(name, number);
+    const newContact = { name, phone: number };
 
-    const findContact = contacts.find(
-      contact => contact.name.toLowerCase() === name
-    );
+    if (contacts.find(contact => contact.name === name)) {
+      return Notify.warning(`${name} is already in contacts.`);
+    } else {
+      dispatch(contactsOperations.addContacts(newContact));
+    }
 
-    findContact
-      ? Notify.warning(`${name} is already in contacts.`)
-      : createContact(newContact);
     reset();
   };
 
