@@ -4,7 +4,7 @@ export const AppContainer = styled.div`
   display: flex;
   /* align-items: center;
   justify-content: center; */
-  height: 100vh;
+  /* height: 100vh; */
   background: radial-gradient(
       94.4% 1159.49% at 2% 83.64%,
       #07a8db 0%,
@@ -16,6 +16,7 @@ export const AppContainer = styled.div`
       #baeafa 41.67%,
       rgba(228, 244, 249, 0) 100%
     );
+  overflow: hidden;
 `;
 
 export const AppSection = styled.section`
