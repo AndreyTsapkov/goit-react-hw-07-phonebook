@@ -4,7 +4,7 @@ export const AppContainer = styled.div`
   display: flex;
   /* align-items: center;
   justify-content: center; */
-  /* height: 100vh; */
+  min-height: 100vh;
   background: radial-gradient(
       94.4% 1159.49% at 2% 83.64%,
       #07a8db 0%,
