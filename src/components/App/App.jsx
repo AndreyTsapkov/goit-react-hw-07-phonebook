@@ -26,9 +26,9 @@ export const App = () => {
   const dispatch = useDispatch();
 
   const contacts = useSelector(getContact);
-  console.log(contacts);
+
   const filterWord = useSelector(getFilterWord);
-  console.log(filterWord);
+
   const loading = useSelector(IsLoading);
 
   useEffect(() => {
